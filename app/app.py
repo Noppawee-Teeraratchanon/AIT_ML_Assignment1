@@ -7,14 +7,18 @@ import pandas as pd
 warnings.filterwarnings('ignore')
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+# load the model
 loaded_model = pickle.load(open('/root/code/selling_price.model', 'rb'))
 
+# make a list of brand
 list = ['Ambassador', 'Ashok', 'Audi', 'BMW', 'Chevrolet', 'Daewoo',
        'Datsun', 'Fiat', 'Force', 'Ford', 'Honda', 'Hyundai', 'Isuzu',
        'Jaguar', 'Jeep', 'Kia', 'Land', 'Lexus', 'MG', 'Mahindra',
        'Maruti', 'Mercedes-Benz', 'Mitsubishi', 'Nissan', 'Opel',
        'Peugeot', 'Renault', 'Skoda', 'Tata', 'Toyota', 'Volkswagen',
        'Volvo', 'None']
+
+# make a list of owner
 list_owner = ["First Owner", "Second Owner", "Third Owner", "Fourth & Above Owner", "None"]
 
 
@@ -66,20 +70,20 @@ app.layout = html.Div([
               State('input-max_power-state', 'value'),
 )
               
-
+# create output function
 def update_output(n_clicks, brand, year,owner, mileage, max_power):  
     
     if n_clicks>=1:
         if year == None:
-            year = 2015
+            year = 2015      #default of year is median of training data which is 2015
         if mileage == None:
-            mileage = 19.38
+            mileage = 19.38  #default of mileage is mean of training data which is 19.38
         if max_power == None:
-            max_power = 82.85
+            max_power = 82.85 #default of max power is median of training data which is 82.85
         if brand == None or brand == 32:
-            brand = 20
+            brand = 20    #default of brand is mode of training data which is 20 (Maruti)
         if owner == None or owner == 5:
-            owner = 1
+            owner = 1     #default of owner is mode of training data which is 1 (First Owner)
         sample = np.array([[max_power, mileage, year, brand, owner]])
         return f'The selling price of this car = {int(np.exp(loaded_model.predict(sample)))} baht'
         
